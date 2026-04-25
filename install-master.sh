@@ -32,8 +32,10 @@ SCRIPTS=(
 
     # Editors / dev apps
     ./install-vscode.sh
+    ./install-cursor.sh
     ./install-intellij.sh
     ./install-claude-code.sh
+    ./install-opencode.sh
     ./install-docker-desktop.sh
 
     # Productivity

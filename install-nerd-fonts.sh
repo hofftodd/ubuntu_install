@@ -2,8 +2,8 @@
 set -e
 
 # Install a selection of Nerd Fonts. See https://www.nerdfonts.com/
-FONTS=(FiraCode JetBrainsMono Hack Meslo)
-VERSION="3.2.1"
+FONTS=(FiraCode JetBrainsMono Hack Meslo CascadiaCode)
+VERSION="3.4.0"
 FONT_DIR="$HOME/.local/share/fonts"
 
 mkdir -p "$FONT_DIR"

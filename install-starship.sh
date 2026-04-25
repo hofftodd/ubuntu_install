@@ -14,3 +14,20 @@ mkdir -p "$HOME/.config"
 starship preset gruvbox-rainbow -o "$HOME/.config/starship.toml"
 
 echo "Starship installed with Gruvbox Rainbow preset. Restart your shell or run: source ~/.bashrc"
+
+# Set the Cascadia Code Nerd Font as the default in GNOME Terminal so the
+# Starship prompt's powerline glyphs render correctly. Note: the Nerd Fonts
+# patched Cascadia is registered under the family name "CaskaydiaCove Nerd Font".
+TERMINAL_FONT="${TERMINAL_FONT:-CaskaydiaCove Nerd Font Mono 12}"
+if command -v gsettings >/dev/null 2>&1 && [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    PROFILE="$(gsettings get org.gnome.Terminal.ProfilesList default 2>/dev/null | tr -d \"'\")"
+    if [ -n "$PROFILE" ]; then
+        SCHEMA_PATH="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE}/"
+        gsettings set "$SCHEMA_PATH" use-system-font false
+        gsettings set "$SCHEMA_PATH" font "$TERMINAL_FONT"
+        echo "GNOME Terminal default profile font set to: $TERMINAL_FONT"
+    fi
+else
+    echo "Skipped GNOME Terminal font setup (no graphical session detected)."
+    echo "  Set your terminal's font to '$TERMINAL_FONT' manually."
+fi

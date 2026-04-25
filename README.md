@@ -52,8 +52,10 @@ USECASE=graphics      ./install-amd-drivers.sh
 - `install-vscode.sh` — Visual Studio Code
 - `install-cursor.sh` — Cursor AI code editor (AppImage)
 - `install-intellij.sh` — JetBrains IntelliJ IDEA
+- `install-micro.sh` — micro, modern terminal text editor
 - `install-claude-code.sh` — Claude Code CLI (Anthropic's official agentic coding tool)
 - `install-opencode.sh` — opencode, open-source terminal coding agent
+- `install-pi.sh` — pi (pi.dev), minimal terminal coding agent (npm; depends on Node)
 - `install-obsidian.sh` — Obsidian
 - `install-docker-desktop.sh` — Docker Desktop
 - `install-gmail.sh`, `install-google-calendar.sh`, `install-google-contacts.sh` — Google web-app shortcuts

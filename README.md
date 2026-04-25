@@ -51,6 +51,7 @@ USECASE=graphics      ./install-amd-drivers.sh
 - `install-1password.sh` — 1Password desktop client
 - `install-vscode.sh` — Visual Studio Code
 - `install-intellij.sh` — JetBrains IntelliJ IDEA
+- `install-claude-code.sh` — Claude Code CLI (Anthropic's official agentic coding tool)
 - `install-obsidian.sh` — Obsidian
 - `install-docker-desktop.sh` — Docker Desktop
 - `install-gmail.sh`, `install-google-calendar.sh`, `install-google-contacts.sh` — Google web-app shortcuts

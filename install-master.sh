@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+./install-flatpak.sh
+./install-obsidian.sh
+./install-chrome.sh
+./install-1password.sh
+./install-vscode.sh
+./install-intellij.sh
+./install-docker-desktop.sh
+./install-gmail.sh
+./install-google-calendar.sh
+./install-google-contacts.sh
+./install-nerd-fonts.sh
+./install-starship.sh
+./install-btop.sh
+./install-nvtop.sh
+./install-radeontop.sh
+./install-amdgpu-top.sh
+./install-mission-center.sh

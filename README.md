@@ -32,7 +32,7 @@ Most scripts that download a pinned version also expose an env var override, e.g
 PYTHON_VERSION=3.13.0 ./install-pyenv.sh
 GO_VERSION=1.24.0     ./install-go.sh
 NODE_VERSION=22       ./install-nodejs.sh
-BACKEND=hip           ./install-llamacpp.sh
+BACKEND=cpu           ./install-llamacpp.sh   # default is vulkan
 USECASE=graphics      ./install-amd-drivers.sh
 ```
 

@@ -23,7 +23,7 @@ Exec=google-chrome --app=${URL}
 Icon=mail-message-new
 Type=Application
 Categories=Network;Email;
-StartupWMClass=mail.google.com__mail_u_0
+StartupWMClass=chrome-mail.google.com__mail_u_0_-Default
 Terminal=false
 EOF
 

@@ -23,7 +23,7 @@ Exec=google-chrome --app=${URL}
 Icon=contact-new
 Type=Application
 Categories=Office;ContactManagement;
-StartupWMClass=contacts.google.com
+StartupWMClass=chrome-contacts.google.com__-Default
 Terminal=false
 EOF
 

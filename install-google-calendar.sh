@@ -23,7 +23,7 @@ Exec=google-chrome --app=${URL}
 Icon=x-office-calendar
 Type=Application
 Categories=Office;Calendar;
-StartupWMClass=calendar.google.com
+StartupWMClass=chrome-calendar.google.com__-Default
 Terminal=false
 EOF
 

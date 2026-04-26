@@ -103,7 +103,7 @@ USECASE=graphics      ./install-amd-drivers.sh
 - `install-python.sh` — System Python 3 + pip + venv (apt)
 - `install-pyenv.sh` — pyenv + a pinned Python build (default 3.12.7)
 - `install-uv.sh` — uv: fast Python package/project manager (recommended for new projects)
-- `install-sdkman.sh` — SDKMAN! for managing JDKs/Gradle/Maven/etc.
+- `install-sdkman.sh` — SDKMAN! plus the default versions of Java (Temurin LTS), Groovy, and Gradle.
 - `install-go.sh` — Go from the official tarball (default 1.23.4)
 - `install-nodejs.sh` — Node.js via nvm (default LTS)
 

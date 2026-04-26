@@ -21,6 +21,9 @@ fi
 git config --global user.name "$GIT_USER_NAME"
 git config --global user.email "$GIT_USER_EMAIL"
 
+# Default editor.
+git config --global core.editor "micro"
+
 # Sensible modern defaults.
 git config --global init.defaultBranch main
 git config --global pull.rebase true

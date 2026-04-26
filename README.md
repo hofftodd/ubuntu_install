@@ -6,10 +6,17 @@ A collection of small, idempotent install scripts for setting up a fresh Ubuntu 
 
 ### Bootstrap (fresh machine)
 
-On a brand-new Ubuntu install, you don't have this repo yet. Run the bootstrap one-liner — it installs git+ssh, configures your git identity, generates an SSH key, prints it for you to paste into GitHub, then clones this repo.
+On a brand-new Ubuntu install, you don't have this repo yet. Run the bootstrap one-liner — it installs git+ssh, prompts for your git name and email, generates an SSH key, prints it for you to paste into GitHub, then clones this repo.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/hofftodd/ubuntu_install/main/bootstrap.sh | bash
+```
+
+To run non-interactively (e.g. in a script):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hofftodd/ubuntu_install/main/bootstrap.sh \
+  | GIT_USER_NAME="Jane Doe" GIT_USER_EMAIL="jane@example.com" bash
 ```
 
 Then:
@@ -62,7 +69,7 @@ USECASE=graphics      ./install-amd-drivers.sh
 - `install-flatpak.sh` — Flatpak + Flathub remote.
 
 ### Git / GitHub
-- `install-git-config.sh` — Sets `user.name`/`user.email` (override with `GIT_USER_NAME`/`GIT_USER_EMAIL`), modern defaults (rebase pulls, autoSetupRemote, zdiff3, rerere), and aliases. Auto-wires `git-delta` as the pager if installed.
+- `install-git-config.sh` — Sets `user.name`/`user.email` (prompts for them if not already configured; or pass `GIT_USER_NAME` / `GIT_USER_EMAIL`), modern defaults (rebase pulls, autoSetupRemote, zdiff3, rerere), and aliases. Auto-wires `git-delta` as the pager if installed.
 - `install-gh.sh` — GitHub CLI (`gh`).
 
 ### GUI apps

@@ -2,9 +2,21 @@
 set -e
 
 # Configure global git settings: user identity + sensible defaults.
-# Override via env vars: GIT_USER_NAME, GIT_USER_EMAIL.
-GIT_USER_NAME="${GIT_USER_NAME:-Todd Hoffmann}"
-GIT_USER_EMAIL="${GIT_USER_EMAIL:-twh@hoffmannet.com}"
+# Override via env vars: GIT_USER_NAME, GIT_USER_EMAIL — otherwise we use
+# whatever is already in `git config --global`, or prompt if nothing is set.
+GIT_USER_NAME="${GIT_USER_NAME:-$(git config --global --get user.name 2>/dev/null || true)}"
+GIT_USER_EMAIL="${GIT_USER_EMAIL:-$(git config --global --get user.email 2>/dev/null || true)}"
+
+if [ -z "$GIT_USER_NAME" ]; then
+    read -r -p "Git user name (e.g. 'Jane Doe'): " GIT_USER_NAME < /dev/tty
+fi
+if [ -z "$GIT_USER_EMAIL" ]; then
+    read -r -p "Git user email (e.g. 'jane@example.com'): " GIT_USER_EMAIL < /dev/tty
+fi
+if [ -z "$GIT_USER_NAME" ] || [ -z "$GIT_USER_EMAIL" ]; then
+    echo "Name and email are required." >&2
+    exit 1
+fi
 
 git config --global user.name "$GIT_USER_NAME"
 git config --global user.email "$GIT_USER_EMAIL"

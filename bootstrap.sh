@@ -12,12 +12,11 @@ set -e
 #
 #   curl -fsSL https://raw.githubusercontent.com/hofftodd/ubuntu_install/main/bootstrap.sh | bash
 #
-# Override defaults via env vars:
-#   GIT_USER_NAME, GIT_USER_EMAIL, SSH_KEY_COMMENT, REPO_URL, CLONE_DIR
+# Override defaults via env vars (otherwise you'll be prompted):
+#   GIT_USER_NAME, GIT_USER_EMAIL, SSH_KEY, SSH_KEY_COMMENT, REPO_URL, CLONE_DIR
 
-GIT_USER_NAME="${GIT_USER_NAME:-Todd Hoffmann}"
-GIT_USER_EMAIL="${GIT_USER_EMAIL:-twh@hoffmannet.com}"
-SSH_KEY_COMMENT="${SSH_KEY_COMMENT:-$GIT_USER_EMAIL}"
+GIT_USER_NAME="${GIT_USER_NAME:-}"
+GIT_USER_EMAIL="${GIT_USER_EMAIL:-}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
 REPO_URL="${REPO_URL:-git@github.com:hofftodd/ubuntu_install.git}"
 CLONE_DIR="${CLONE_DIR:-$HOME/ubuntu_install}"
@@ -25,6 +24,24 @@ CLONE_DIR="${CLONE_DIR:-$HOME/ubuntu_install}"
 echo "═══════════════════════════════════════════════════════════"
 echo "  Ubuntu workstation bootstrap"
 echo "═══════════════════════════════════════════════════════════"
+
+# Prompt for any unset identity values. Read from /dev/tty so this works
+# even when the script is piped through bash (curl ... | bash leaves stdin
+# attached to the curl stream, not the terminal).
+if [ -z "$GIT_USER_NAME" ]; then
+    read -r -p "Git user name (e.g. 'Jane Doe'): " GIT_USER_NAME < /dev/tty
+fi
+if [ -z "$GIT_USER_EMAIL" ]; then
+    read -r -p "Git user email (e.g. 'jane@example.com'): " GIT_USER_EMAIL < /dev/tty
+fi
+if [ -z "$GIT_USER_NAME" ] || [ -z "$GIT_USER_EMAIL" ]; then
+    echo "Name and email are required." >&2
+    exit 1
+fi
+
+SSH_KEY_COMMENT="${SSH_KEY_COMMENT:-$GIT_USER_EMAIL}"
+
+echo
 echo "  Git user:  ${GIT_USER_NAME} <${GIT_USER_EMAIL}>"
 echo "  SSH key:   ${SSH_KEY}"
 echo "  Repo:      ${REPO_URL}"
@@ -78,7 +95,7 @@ echo "  → Open: https://github.com/settings/ssh/new"
 echo "  → Paste the line above and save."
 echo
 
-read -r -p "Press ENTER once you've added the key to GitHub..."
+read -r -p "Press ENTER once you've added the key to GitHub..." < /dev/tty
 
 # Add github.com to known_hosts non-interactively, then verify auth.
 echo

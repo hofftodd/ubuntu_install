@@ -63,6 +63,7 @@ SCRIPTS=(
     # Sync / utilities
     ./install-syncthing.sh
     ./install-vlc.sh
+    ./install-handbrake.sh
     ./install-flameshot.sh
 
     # Terminal experience

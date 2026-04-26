@@ -4,6 +4,25 @@ A collection of small, idempotent install scripts for setting up a fresh Ubuntu 
 
 ## Usage
 
+### Bootstrap (fresh machine)
+
+On a brand-new Ubuntu install, you don't have this repo yet. Run the bootstrap one-liner — it installs git+ssh, configures your git identity, generates an SSH key, prints it for you to paste into GitHub, then clones this repo.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hofftodd/ubuntu_install/main/bootstrap.sh | bash
+```
+
+Then:
+
+```bash
+cd ~/ubuntu_install
+./install-master.sh
+```
+
+`bootstrap.sh` is **not** part of `install-master.sh` — it's the chicken-and-egg step.
+
+### After bootstrap
+
 Run a single script:
 
 ```bash

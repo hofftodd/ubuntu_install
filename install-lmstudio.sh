@@ -36,8 +36,10 @@ fi
 chmod +x "$APPIMAGE_PATH"
 
 # Extract the AppImage's embedded icon so the launcher has something to show.
-# Every AppImage exposes its icon via .DirIcon (a symlink to the actual file)
-# at the root of the extracted AppDir.
+# .DirIcon at the AppDir root is a symlink to the real icon file. Extracting
+# .DirIcon alone only pulls out the symlink — we have to read its target and
+# extract that path too. Targets vary: Cursor uses a sibling PNG, LM Studio
+# points deep into usr/share/icons/.
 ICON_DIR="$HOME/.local/share/icons"
 ICON_PATH="$ICON_DIR/lmstudio.png"
 mkdir -p "$ICON_DIR"
@@ -45,6 +47,10 @@ EXTRACT_TMP="$(mktemp -d)"
 (
     cd "$EXTRACT_TMP"
     "$APPIMAGE_PATH" --appimage-extract .DirIcon >/dev/null
+    if [ -L squashfs-root/.DirIcon ]; then
+        ICON_TARGET="$(readlink squashfs-root/.DirIcon)"
+        "$APPIMAGE_PATH" --appimage-extract "$ICON_TARGET" >/dev/null
+    fi
 )
 if [ -f "$EXTRACT_TMP/squashfs-root/.DirIcon" ]; then
     cp -L "$EXTRACT_TMP/squashfs-root/.DirIcon" "$ICON_PATH"

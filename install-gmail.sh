@@ -1,20 +1,31 @@
 #!/bin/bash
+set -e
 
-# Function to check and install Gmail as a PWA using Chrome
-install_gmail_pwa() {
-    # Check if Google Chrome is installed
-    if ! command -v flatpak run com.google.Chrome &> /dev/null
-    then
-        echo "Google Chrome not found. Please install Google Chrome first."
-        exit 1
-    fi
+# Install Gmail as a Chrome "app-mode" launcher.
+# Chrome's --install-system-app flag only works on managed Chromebooks, so on
+# Linux we just write a .desktop file that opens Chrome in app mode.
 
-    echo "Attempting to install Gmail as a Progressive Web App (PWA)..."
-    # This command uses Chrome's command-line flags to install the current URL as an app
-    google-chrome --force-dark-mode --enable-features=WebApps,DesktopPWAs --install-system-app=https://mail.google.com/mail/u/0/#inbox
+if ! command -v google-chrome &>/dev/null; then
+    echo "Google Chrome not found. Install it first (./install-chrome.sh)." >&2
+    exit 1
+fi
 
-    echo "A Gmail shortcut/app icon should now be available in your application launcher."
-}
+APP_DIR="$HOME/.local/share/applications"
+DESKTOP_FILE="$APP_DIR/gmail.desktop"
+URL="https://mail.google.com/mail/u/0/"
 
-install_gmail_pwa
+mkdir -p "$APP_DIR"
+cat > "$DESKTOP_FILE" <<EOF
+[Desktop Entry]
+Name=Gmail
+Comment=Gmail web app
+Exec=google-chrome --app=${URL}
+Icon=mail-message-new
+Type=Application
+Categories=Network;Email;
+StartupWMClass=mail.google.com__mail_u_0
+Terminal=false
+EOF
 
+update-desktop-database "$APP_DIR" 2>/dev/null || true
+echo "Gmail launcher installed at $DESKTOP_FILE"

@@ -10,7 +10,7 @@ SCRIPTS=(
     ./update-versions.sh
 
     # Drivers / base
-    ./install-amd-drivers.sh
+    # ./install-amd-drivers.sh   # Ubuntu 26 ships modern amdgpu in-kernel; only needed for ROCm
     ./install-flatpak.sh
 
     # Git / GitHub

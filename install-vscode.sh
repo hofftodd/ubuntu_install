@@ -1,4 +1,4 @@
 #!/bin/bash
-flatpak install flathub com.visualstudio.code -y
+flatpak install --user -y flathub com.visualstudio.code
 
 

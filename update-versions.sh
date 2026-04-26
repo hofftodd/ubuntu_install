@@ -13,7 +13,9 @@ set -e
 #   Nerd Fonts    — github.com/ryanoasis/nerd-fonts latest release
 #
 # Skipped (no reliable machine-readable source):
-#   LM Studio     — version-pinned AppImage URL; check https://lmstudio.ai/
+#   LM Studio     — download page is JS-rendered, no public manifest;
+#                   install-lmstudio.sh prints a clear error pointing at
+#                   https://lmstudio.ai/download when the pin goes stale
 #   AMD drivers   — check https://www.amd.com/en/support/linux-drivers
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -88,7 +90,7 @@ update_plain "${DIR}/install-nerd-fonts.sh" "VERSION" "$NF_LATEST"
 
 echo
 echo "Skipped (manual check needed):"
-echo "  - install-lmstudio.sh    — see https://lmstudio.ai/"
+echo "  - install-lmstudio.sh    — see https://lmstudio.ai/download (no machine-readable source)"
 echo "  - install-amd-drivers.sh — see https://www.amd.com/en/support/linux-drivers"
 echo
 echo "Done."

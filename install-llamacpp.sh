@@ -17,7 +17,7 @@ sudo apt-get install -y build-essential cmake git curl libcurl4-openssl-dev
 # Backend-specific extras.
 case "$BACKEND" in
     vulkan)
-        sudo apt-get install -y libvulkan-dev glslc
+        sudo apt-get install -y libvulkan-dev glslc glslang-tools spirv-headers
         ;;
     cuda|hip|cpu)
         : # cuda/hip toolchains are user-managed; cpu needs nothing extra

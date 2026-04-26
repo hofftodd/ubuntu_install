@@ -2,4 +2,4 @@
 set -e
 
 # Install Mission Center. See https://missioncenter.io/
-flatpak install flathub io.missioncenter.MissionCenter -y
+flatpak install --user -y flathub io.missioncenter.MissionCenter

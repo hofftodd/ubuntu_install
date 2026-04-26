@@ -12,12 +12,22 @@ AMDGPU_VERSION="${AMDGPU_VERSION:-6.3.2}"
 AMDGPU_PKG="${AMDGPU_PKG:-amdgpu-install_6.3.60302-1_all.deb}"
 USECASE="${USECASE:-graphics,rocm}"   # other options: graphics, rocm, workstation, hip, opencl, lrt
 
-CODENAME="$(lsb_release -cs)"
+# AMD's repo lags new Ubuntu codenames by several months. Override with
+# CODENAME=noble (or whatever's published at https://repo.radeon.com/amdgpu-install/)
+# when running on a too-new release.
+CODENAME="${CODENAME:-$(lsb_release -cs)}"
 URL="https://repo.radeon.com/amdgpu-install/${AMDGPU_VERSION}/ubuntu/${CODENAME}/${AMDGPU_PKG}"
 
 cd /tmp
 echo "Downloading ${URL}..."
-wget -q "$URL" -O "$AMDGPU_PKG"
+if ! wget "$URL" -O "$AMDGPU_PKG"; then
+    rm -f "$AMDGPU_PKG"
+    echo
+    echo "Download failed. AMD likely hasn't published packages for codename '${CODENAME}' yet." >&2
+    echo "Check https://repo.radeon.com/amdgpu-install/${AMDGPU_VERSION}/ubuntu/ for available codenames" >&2
+    echo "and re-run with: CODENAME=<codename> $0" >&2
+    exit 1
+fi
 
 # Install the installer package, refresh apt indices, then run the installer.
 sudo apt-get update

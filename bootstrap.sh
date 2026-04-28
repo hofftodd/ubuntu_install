@@ -100,16 +100,28 @@ read -r -p "Press ENTER once you've added the key to GitHub..." < /dev/tty
 # Add github.com to known_hosts non-interactively, then verify auth.
 echo
 echo "[4/5] Verifying SSH access to GitHub..."
-ssh-keyscan -t ed25519 github.com 2>/dev/null >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
-sort -u "$HOME/.ssh/known_hosts" -o "$HOME/.ssh/known_hosts" 2>/dev/null || true
+touch "$HOME/.ssh/known_hosts"
+chmod 600 "$HOME/.ssh/known_hosts"
+ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
+sort -u "$HOME/.ssh/known_hosts" -o "$HOME/.ssh/known_hosts"
 
 # `ssh -T git@github.com` exits 1 even on success ("you have successfully
 # authenticated, but GitHub does not provide shell access"), so check the
-# message body.
-if ssh -T -o BatchMode=yes -o StrictHostKeyChecking=accept-new git@github.com 2>&1 | grep -q "successfully authenticated"; then
+# message body. Capture into a variable instead of piping to grep — piping
+# to `grep -q` lets grep exit on first match and leaves ssh to die from
+# SIGPIPE, which on some setups stalls long enough to look like a hang.
+ssh_output="$(ssh -T \
+    -o BatchMode=yes \
+    -o StrictHostKeyChecking=accept-new \
+    -o ConnectTimeout=10 \
+    git@github.com 2>&1 || true)"
+
+if printf '%s\n' "$ssh_output" | grep -q "successfully authenticated"; then
     echo "  ✓ GitHub SSH auth working."
 else
     echo "  ✗ Could not authenticate to GitHub via SSH." >&2
+    echo "    ssh said:" >&2
+    printf '      %s\n' "$ssh_output" >&2
     echo "    Confirm the key was added at https://github.com/settings/keys" >&2
     echo "    then re-run this script." >&2
     exit 1

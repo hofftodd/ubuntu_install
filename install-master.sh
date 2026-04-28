@@ -35,6 +35,7 @@ SCRIPTS=(
     ./install-cursor.sh
     ./install-intellij.sh
     ./install-micro.sh
+    ./install-fresh.sh
     ./install-claude-code.sh
     ./install-opencode.sh
     ./install-pi.sh
@@ -83,6 +84,26 @@ SUCCEEDED=()
 FAILED=()
 SKIPPED=()
 LOG_DIR="$(mktemp -d -t ubuntu_install.XXXXXX)"
+
+# Prompt up-front for the llama.cpp backend so install-llamacpp.sh runs
+# unattended later. Skip the prompt if BACKEND is already set in env.
+if [ -z "${BACKEND:-}" ]; then
+    echo "llama.cpp backend:"
+    echo "  1) vulkan  — cross-vendor GPU (Intel/AMD/NVIDIA), default"
+    echo "  2) cpu     — CPU only"
+    echo "  3) cuda    — NVIDIA (requires CUDA toolkit)"
+    echo "  4) hip     — AMD ROCm"
+    read -r -p "Choose [1-4, default 1]: " choice < /dev/tty || choice=""
+    case "$choice" in
+        2) BACKEND=cpu ;;
+        3) BACKEND=cuda ;;
+        4) BACKEND=hip ;;
+        *) BACKEND=vulkan ;;
+    esac
+    echo "  → BACKEND=$BACKEND"
+    echo
+fi
+export BACKEND
 
 echo "Logs: $LOG_DIR"
 echo "Running ${#SCRIPTS[@]} scripts..."

@@ -3,14 +3,14 @@ set -e
 
 # Bootstrap a fresh Ubuntu machine: install git+ssh, configure git identity,
 # generate an SSH key (if needed), wait for you to add it to GitHub, then
-# clone the ubuntu_install repo. After this finishes you can run
+# clone the ubuntu-install repo. After this finishes you can run
 # ./install-master.sh inside the cloned repo.
 #
 # This script is intentionally NOT part of install-master.sh — it's the
 # chicken-and-egg "how do I even get the install scripts onto the machine"
 # step. To run on a fresh box:
 #
-#   curl -fsSL https://raw.githubusercontent.com/hofftodd/ubuntu_install/main/bootstrap.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/hofftodd/ubuntu-install/main/bootstrap.sh | bash
 #
 # Override defaults via env vars (otherwise you'll be prompted):
 #   GIT_USER_NAME, GIT_USER_EMAIL, SSH_KEY, SSH_KEY_COMMENT, REPO_URL, CLONE_DIR
@@ -18,8 +18,8 @@ set -e
 GIT_USER_NAME="${GIT_USER_NAME:-}"
 GIT_USER_EMAIL="${GIT_USER_EMAIL:-}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
-REPO_URL="${REPO_URL:-git@github.com:hofftodd/ubuntu_install.git}"
-CLONE_DIR="${CLONE_DIR:-$HOME/ubuntu_install}"
+REPO_URL="${REPO_URL:-git@github.com:hofftodd/ubuntu-install.git}"
+CLONE_DIR="${CLONE_DIR:-$HOME/ubuntu-install}"
 
 echo "═══════════════════════════════════════════════════════════"
 echo "  Ubuntu workstation bootstrap"
@@ -52,6 +52,19 @@ echo
 echo "[1/5] Installing git and openssh-client..."
 sudo apt-get update
 sudo apt-get install -y git openssh-client curl
+
+# glow is used by install-master.sh to render this repo's README from inside
+# the TUI menu. It's not in default Ubuntu repos — pull it from Charm's apt
+# repo. Skip if already installed (e.g. user added it manually).
+if ! command -v glow >/dev/null 2>&1; then
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://repo.charm.sh/apt/gpg.key \
+        | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" \
+        | sudo tee /etc/apt/sources.list.d/charm.list >/dev/null
+    sudo apt-get update
+    sudo apt-get install -y glow
+fi
 
 # ---- 2. Configure git identity + sensible defaults --------------------------
 echo

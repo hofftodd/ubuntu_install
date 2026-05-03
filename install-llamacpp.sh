@@ -45,7 +45,7 @@ case "$BACKEND" in
     vulkan) CMAKE_FLAGS+=(-DGGML_VULKAN=ON) ;;
 esac
 
-cmake -S "$SRC_DIR" -B "$SRC_DIR/build" "${CMAKE_FLAGS[@]}"
+cmake -S "$SRC_DIR" -B "$SRC_DIR/build" ${CMAKE_FLAGS[@]+"${CMAKE_FLAGS[@]}"}
 cmake --build "$SRC_DIR/build" --config Release -j"$(nproc)"
 
 # Symlink the main binaries onto PATH.

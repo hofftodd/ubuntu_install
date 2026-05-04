@@ -111,11 +111,16 @@ echo
 read -r -p "Press ENTER once you've added the key to GitHub..." < /dev/tty
 
 # Add github.com to known_hosts non-interactively, then verify auth.
+# Breadcrumbs on each substep — silent exits in this block were a debugging
+# nightmare on WSL, where ssh-keyscan can crash on IPv6-only routes.
 echo
 echo "[4/5] Verifying SSH access to GitHub..."
+echo "  · ensuring ~/.ssh/known_hosts exists"
 touch "$HOME/.ssh/known_hosts"
 chmod 600 "$HOME/.ssh/known_hosts"
-ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
+echo "  · scanning github.com host keys (IPv4, 10s timeout)"
+ssh-keyscan -4 -T 10 -t rsa,ecdsa,ed25519 github.com \
+    >> "$HOME/.ssh/known_hosts" || echo "    (ssh-keyscan returned non-zero — continuing)"
 sort -u "$HOME/.ssh/known_hosts" -o "$HOME/.ssh/known_hosts"
 
 # `ssh -T git@github.com` exits 1 even on success ("you have successfully
@@ -123,7 +128,9 @@ sort -u "$HOME/.ssh/known_hosts" -o "$HOME/.ssh/known_hosts"
 # message body. Capture into a variable instead of piping to grep — piping
 # to `grep -q` lets grep exit on first match and leaves ssh to die from
 # SIGPIPE, which on some setups stalls long enough to look like a hang.
+echo "  · authenticating to git@github.com (IPv4, 10s timeout)"
 ssh_output="$(ssh -T \
+    -4 \
     -o BatchMode=yes \
     -o StrictHostKeyChecking=accept-new \
     -o ConnectTimeout=10 \

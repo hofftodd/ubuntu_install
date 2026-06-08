@@ -19,15 +19,16 @@ CODENAME="${CODENAME:-$(lsb_release -cs)}"
 URL="https://repo.radeon.com/amdgpu-install/${AMDGPU_VERSION}/ubuntu/${CODENAME}/${AMDGPU_PKG}"
 
 cd /tmp
-echo "Downloading ${URL}..."
-if ! wget "$URL" -O "$AMDGPU_PKG"; then
-    rm -f "$AMDGPU_PKG"
+echo "Checking ${URL}..."
+if ! wget -q --spider "$URL"; then
     echo
-    echo "Download failed. AMD likely hasn't published packages for codename '${CODENAME}' yet." >&2
-    echo "Check https://repo.radeon.com/amdgpu-install/${AMDGPU_VERSION}/ubuntu/ for available codenames" >&2
-    echo "and re-run with: CODENAME=<codename> $0" >&2
-    exit 1
+    echo "Skipping: AMD hasn't published amdgpu-install ${AMDGPU_VERSION} for codename '${CODENAME}' yet."
+    echo "Check https://repo.radeon.com/amdgpu-install/${AMDGPU_VERSION}/ubuntu/ for available codenames"
+    echo "and re-run with: CODENAME=<codename> $0  (e.g. CODENAME=noble)"
+    exit 0
 fi
+echo "Downloading ${URL}..."
+wget -q "$URL" -O "$AMDGPU_PKG"
 
 # Install the installer package, refresh apt indices, then run the installer.
 sudo apt-get update

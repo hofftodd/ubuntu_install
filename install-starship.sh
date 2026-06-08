@@ -20,7 +20,8 @@ echo "Starship installed with Gruvbox Rainbow preset. Restart your shell or run:
 # patched Cascadia is registered under the family name "CaskaydiaCove Nerd Font".
 TERMINAL_FONT="${TERMINAL_FONT:-CaskaydiaCove Nerd Font Mono 12}"
 if command -v gsettings >/dev/null 2>&1 && [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
-    PROFILE="$(gsettings get org.gnome.Terminal.ProfilesList default 2>/dev/null | tr -d \"'\")"
+    PROFILE_RAW="$(gsettings get org.gnome.Terminal.ProfilesList default 2>/dev/null || true)"
+    PROFILE="${PROFILE_RAW//\'/}"
     if [ -n "$PROFILE" ]; then
         SCHEMA_PATH="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE}/"
         gsettings set "$SCHEMA_PATH" use-system-font false

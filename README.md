@@ -122,6 +122,9 @@ These categories match the menu layout in `install-master.sh`.
 - `install-zoom.sh` — Zoom desktop client.
 - `install-signal.sh` — Signal desktop client.
 
+### Games
+- `install-steam.sh` — Steam (Valve's official `.deb`; enables i386 multiarch).
+
 ### Networking
 - `install-tailscale.sh` — Tailscale mesh VPN.
 

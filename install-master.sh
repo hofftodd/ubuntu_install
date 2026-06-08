@@ -52,6 +52,8 @@ ITEMS=(
     "Comms|./install-zoom.sh"
     "Comms|./install-signal.sh"
 
+    "Games|./install-steam.sh"
+
     "Networking|./install-tailscale.sh"
     "Networking|./install-nas-tools.sh"
 

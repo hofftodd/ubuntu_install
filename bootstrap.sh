@@ -129,7 +129,7 @@ sort -u "$HOME/.ssh/known_hosts" -o "$HOME/.ssh/known_hosts"
 # to `grep -q` lets grep exit on first match and leaves ssh to die from
 # SIGPIPE, which on some setups stalls long enough to look like a hang.
 echo "  · authenticating to git@github.com (IPv4, 10s timeout)"
-ssh_output="$(ssh -T \
+ssh_output="$(ssh -T -n \
     -4 \
     -o BatchMode=yes \
     -o StrictHostKeyChecking=accept-new \
